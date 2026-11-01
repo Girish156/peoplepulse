@@ -1,0 +1,57 @@
+[
+  {
+    "anomaly_id": "ANO-001",
+    "anomaly_type": "goal_owner_mismatch",
+    "entity_type": "check_in",
+    "entity_id": "CHK-EMP-000020-20260116-999",
+    "rule_id": "RULE-001",
+    "description": "Check-in employee_id does not match goal owner employee_id",
+    "expected_value": "EMP-000010",
+    "actual_value": "EMP-000020",
+    "injection_mechanism": "check_in.employee_id set to EMP-000020 while goal GOAL-EMP-000010-001 is owned by EMP-000010"
+  },
+  {
+    "anomaly_id": "ANO-002",
+    "anomaly_type": "progress_exceeds_scale",
+    "entity_type": "key_result",
+    "entity_id": "KR-GOAL-EMP-000005-001-01",
+    "rule_id": "RULE-002",
+    "description": "KR actual value is 250% of target, exceeding allowed_progress_scale of 1.0",
+    "expected_value": "actual/target <= 1.0",
+    "actual_value": "2.5",
+    "injection_mechanism": "actual=250.0 set to target*2.5 with allowed_scale=1.0"
+  },
+  {
+    "anomaly_id": "ANO-003",
+    "anomaly_type": "reviewer_no_relationship",
+    "entity_type": "feedback",
+    "entity_id": "FBK-000200",
+    "rule_id": "RULE-003",
+    "description": "EMP-000050 gave feedback on EMP-000100 without being their manager or review participant",
+    "expected_value": "author is manager of subject or in review_participants",
+    "actual_value": "author=EMP-000050, subject=EMP-000100, no relationship",
+    "injection_mechanism": "feedback injected with author=EMP-000050 who is not manager of subject=EMP-000100"
+  },
+  {
+    "anomaly_id": "ANO-004",
+    "anomaly_type": "closed_cycle_edit",
+    "entity_type": "audit_event",
+    "entity_id": "AUD-000000101",
+    "rule_id": "RULE-004",
+    "description": "Goal in closed cycle CYCLE-2025-H1 was modified without authorized_correction flag",
+    "expected_value": "is_authorized_correction=True OR cycle is not closed",
+    "actual_value": "action=modified, is_authorized_correction=False, cycle_status=closed",
+    "injection_mechanism": "Audit event with action=modified on GOAL-EMP-000078-001 in CYCLE-2025-H1 (closed) with is_authorized_correction=False"
+  },
+  {
+    "anomaly_id": "ANO-005",
+    "anomaly_type": "untraceable_feedback",
+    "entity_type": "feedback",
+    "entity_id": "FBK-000201",
+    "rule_id": "RULE-005",
+    "description": "Feedback record references non-existent author employee ID EMP-999999",
+    "expected_value": "author_employee_id must reference a valid employee",
+    "actual_value": "EMP-999999",
+    "injection_mechanism": "author_employee_id set to EMP-999999 which does not exist in employees table"
+  }
+]
